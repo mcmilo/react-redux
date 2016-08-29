@@ -1,4 +1,5 @@
 import toggleTodo from '../../app/reducers/toggleTodo';
+import deepFreeze from 'deep-freeze';
 
 const beforeState = {
   id: 0,
@@ -13,6 +14,8 @@ const afterState = {
 };
 
 describe('toggle To Do Reducer', () => {
+  deepFreeze(beforeState);
+
   it('should change the completed value of the To Do', () => {
     expect(
       toggleTodo(beforeState)
