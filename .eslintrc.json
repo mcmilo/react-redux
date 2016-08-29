@@ -1,0 +1,25 @@
+{
+  "parser": "babel-eslint",
+  "extends": "airbnb",
+  "env": {
+    "browser": true,
+    "es6": true,
+    "jasmine": true,
+    "node": true
+  },
+  "plugins": [
+    "react"
+  ],
+  "ecmaFeatures": {
+    "experimentalObjectRestSpread": true,
+    "modules": true
+  },
+  "rules": {
+    "comma-dangle": [2, "never"],
+    "no-unused-vars": [2, {"args": "after-used", "argsIgnorePattern": "^_"}],
+
+    "react/jsx-closing-bracket-location": 0,
+    "react/jsx-indent-props": [0, 2],
+    "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }]
+  }
+}

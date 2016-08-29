@@ -1,0 +1,9 @@
+### OSX template
+.DS_Store
+
+## Directory-based project format:
+.idea/
+
+### UI Dev
+node_modules
+npm-debug.log
