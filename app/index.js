@@ -3,6 +3,7 @@ import React, { Component, PropTypes } from 'react';
 import { render } from 'react-dom';
 import { createStore } from 'redux';
 import todoApp from './reducers/todoApp';
+import { TodoList } from './components/components';
 
 const store = createStore(todoApp);
 
@@ -31,6 +32,7 @@ const getVisibleTodos = (
     default:
       filteredTodos = todos;
   }
+
   return filteredTodos;
 };
 
@@ -101,27 +103,15 @@ class App extends Component {
             this.input.value = '';
           }}>Add Todo
         </button>
-        <ul>
-          {visibleTodos.map(todo =>
-            <li
-                key={todo.id}
-                onClick={() => {
-                  store.dispatch({
-                    type: 'TOGGLE_TODO',
-                    id: todo.id
-                  });
-                }}
-                style={{
-                  textDecoration:
-                    todo.completed ?
-                      'line-through' :
-                      'none'
-                }}
-            >
-              {todo.text}
-            </li>
-          )}
-        </ul>
+        <TodoList
+          todos={visibleTodos}
+          onTodoClick={id =>
+            store.dispatch({
+              type: 'TOGGLE_TODO',
+              id
+            })
+          }
+        />
         <p>
           Show:
           {' '}
