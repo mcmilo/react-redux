@@ -1,9 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { addTodo } from '../actions/actionsCreators';
 
 const AddTodo = ({ dispatch }) => {
   let input;
-  let nextTodoId = 0;
 
   return (
     <div>
@@ -14,11 +14,7 @@ const AddTodo = ({ dispatch }) => {
       />
       <button
         onClick={() => {
-          dispatch({
-            type: 'ADD_TODO',
-            id: nextTodoId++,
-            text: input.value
-          });
+          dispatch(addTodo(input.value));
           input.value = '';
         }}>
         Add Todo
