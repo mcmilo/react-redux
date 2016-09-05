@@ -1,6 +1,7 @@
 import React from 'react';
+import { connect } from 'react-redux';
 
-const AddTodo = (props, { store }) => {
+const AddTodo = ({ dispatch }) => {
   let input;
   let nextTodoId = 0;
 
@@ -13,7 +14,7 @@ const AddTodo = (props, { store }) => {
       />
       <button
         onClick={() => {
-          store.dispatch({
+          dispatch({
             type: 'ADD_TODO',
             id: nextTodoId++,
             text: input.value
@@ -26,8 +27,6 @@ const AddTodo = (props, { store }) => {
   );
 };
 
-AddTodo.contextTypes = {
-  store: React.PropTypes.object
-};
-
-export default AddTodo;
+// connect without params will not subscribe to store
+// but will pass dispatch to component
+export default connect()(AddTodo);
