@@ -35,10 +35,7 @@ var config = {
       {
         test: /.js$/,
         loader: 'babel-loader',
-        include : PATHS.app,
-        query: {
-          presets: ['es2015', 'react']
-        }
+        include : PATHS.app
       }
     ]
   },
