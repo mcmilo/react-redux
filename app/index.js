@@ -12,24 +12,41 @@ import {
 } from './modules/modules';
 
 class App extends Component {
-  static propTypes = {
-    store: PropTypes.object
-  };
 
   render() {
-    const {
-      store
-    } = this.props;
-
     return (
       <div>
-        <AddTodo store={store} />
-        <VisibleTodoList store={store} />
-        <Footer store={store} />
+        <AddTodo />
+        <VisibleTodoList />
+        <Footer />
       </div>
     );
   }
 }
 
-render(<App store={createStore(todoApp)} />,
+class Provider extends Component {
+  static propTypes = {
+    store: PropTypes.object,
+    children: PropTypes.object
+  };
+
+  getChildContext() {
+    return {
+      store: this.props.store
+    };
+  }
+
+  render() {
+    return this.props.children;
+  }
+}
+// Necessary to the context to be turn on
+Provider.childContextTypes = {
+  store: PropTypes.object
+};
+
+render(
+  <Provider store={createStore(todoApp)}>
+    <App />
+  </Provider>,
   document.getElementById('app'));

@@ -3,12 +3,14 @@ import { TodoList } from '../components/components';
 
 class VisibleTodoList extends Component {
 
+  /*
   static propTypes = {
     store: PropTypes.object
   };
+*/
 
   componentDidMount() {
-    const { store } = this.props;
+    const { store } = this.context;
     this.unsubscribe = store.subscribe(() =>
       this.forceUpdate()
     );
@@ -46,8 +48,7 @@ class VisibleTodoList extends Component {
   };
 
   render() {
-    const props = this.props;
-    const store = props.store;
+    const store = this.context.store;
     const state = store.getState();
 
     return (
@@ -68,5 +69,10 @@ class VisibleTodoList extends Component {
     );
   }
 }
+
+// We need to tell React which context we want to receive
+VisibleTodoList.contextTypes = {
+  store: PropTypes.object
+};
 
 export default VisibleTodoList;
