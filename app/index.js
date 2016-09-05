@@ -3,7 +3,11 @@ import React, { Component, PropTypes } from 'react';
 import { render } from 'react-dom';
 import { createStore } from 'redux';
 import todoApp from './reducers/todoApp';
-import { TodoList } from './components/components';
+import {
+  TodoList,
+  AddTodo,
+  Footer
+} from './components/components';
 
 const store = createStore(todoApp);
 
@@ -36,39 +40,6 @@ const getVisibleTodos = (
   return filteredTodos;
 };
 
-class FilterLink extends Component {
-  static propTypes = {
-    filter: PropTypes.string.isRequired,
-    currentFilter: PropTypes.string.isRequired,
-    children: PropTypes.string.isRequired
-  };
-
-  render() {
-    const filter = this.props.filter;
-    const children = this.props.children;
-    const currentFilter = this.props.currentFilter;
-
-    if (filter === currentFilter) {
-      return <span>{children}</span>;
-    }
-
-    return (
-      <a
-        href="#{children}"
-        onClick={e => {
-          e.preventDefault();
-          store.dispatch({
-            type: 'SET_VISIBILITY_FILTER',
-            filter
-          });
-        }}
-      >
-        {children}
-      </a>
-    );
-  }
-}
-
 class App extends Component {
   static propTypes = {
     todos: PropTypes.array.isRequired,
@@ -87,22 +58,15 @@ class App extends Component {
 
     return (
       <div>
-        <input
-          ref={node => {
-            this.input = node;
-          }
-        }
-        />
-        <button
-          onClick={() => {
+        <AddTodo
+          onAddClick={text =>
             store.dispatch({
               type: 'ADD_TODO',
-              text: this.input.value,
-              id: nextTodoId++
-            });
-            this.input.value = '';
-          }}>Add Todo
-        </button>
+              id: nextTodoId++,
+              text
+            })
+          }
+        />
         <TodoList
           todos={visibleTodos}
           onTodoClick={id =>
@@ -112,30 +76,15 @@ class App extends Component {
             })
           }
         />
-        <p>
-          Show:
-          {' '}
-          <FilterLink
-            filter="SHOW_ALL"
-            currentFilter={visibilityFilter}
-          >
-            All
-          </FilterLink>
-          {' '}
-          <FilterLink
-            filter="SHOW_ACTIVE"
-            currentFilter={visibilityFilter}
-          >
-            Active
-          </FilterLink>
-          {' '}
-          <FilterLink
-            filter="SHOW_COMPLETED"
-            currentFilter={visibilityFilter}
-          >
-            Completed
-          </FilterLink>
-        </p>
+        <Footer
+          visibilityFilter={visibilityFilter}
+          onFilterClick={filter =>
+            store.dispatch({
+              type: 'SET_VISIBILITY_FILTER',
+              filter
+            })
+          }
+        />
       </div>
     );
   }
