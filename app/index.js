@@ -1,6 +1,7 @@
 /* eslint react/prefer-stateless-function: "off" */
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
 import { render } from 'react-dom';
+import { Provider } from 'react-redux';
 import { createStore } from 'redux';
 import todoApp from './reducers/todoApp';
 import {
@@ -23,27 +24,6 @@ class App extends Component {
     );
   }
 }
-
-class Provider extends Component {
-  static propTypes = {
-    store: PropTypes.object,
-    children: PropTypes.object
-  };
-
-  getChildContext() {
-    return {
-      store: this.props.store
-    };
-  }
-
-  render() {
-    return this.props.children;
-  }
-}
-// Necessary to the context to be turn on
-Provider.childContextTypes = {
-  store: PropTypes.object
-};
 
 render(
   <Provider store={createStore(todoApp)}>
