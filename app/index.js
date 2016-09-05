@@ -8,12 +8,81 @@ const store = createStore(todoApp);
 
 let nextTodoId = 0;
 
-class App extends Component {
+const getVisibleTodos = (
+  todos,
+  filter
+) => {
+  let filteredTodos;
+
+  switch (filter) {
+    case 'SHOW_ALL':
+      filteredTodos = todos;
+      break;
+    case 'SHOW_COMPLETED':
+      filteredTodos = todos.filter(
+        t => t.completed
+      );
+      break;
+    case 'SHOW_ACTIVE':
+      filteredTodos = todos.filter(
+        t => !t.completed
+      );
+      break;
+    default:
+      filteredTodos = todos;
+  }
+  return filteredTodos;
+};
+
+class FilterLink extends Component {
   static propTypes = {
-    todos: PropTypes.array.isRequired
+    filter: PropTypes.string.isRequired,
+    currentFilter: PropTypes.string.isRequired,
+    children: PropTypes.string.isRequired
   };
 
   render() {
+    const filter = this.props.filter;
+    const children = this.props.children;
+    const currentFilter = this.props.currentFilter;
+
+    if (filter === currentFilter) {
+      return <span>{children}</span>;
+    }
+
+    return (
+      <a
+        href="#{children}"
+        onClick={e => {
+          e.preventDefault();
+          store.dispatch({
+            type: 'SET_VISIBILITY_FILTER',
+            filter
+          });
+        }}
+      >
+        {children}
+      </a>
+    );
+  }
+}
+
+class App extends Component {
+  static propTypes = {
+    todos: PropTypes.array.isRequired,
+    visibilityFilter: PropTypes.string.isRequired
+  };
+
+  render() {
+    const {
+      todos,
+      visibilityFilter
+    } = this.props;
+    const visibleTodos = getVisibleTodos(
+      todos,
+      visibilityFilter
+    );
+
     return (
       <div>
         <input
@@ -33,7 +102,7 @@ class App extends Component {
           }}>Add Todo
         </button>
         <ul>
-          {this.props.todos.map(todo =>
+          {visibleTodos.map(todo =>
             <li
                 key={todo.id}
                 onClick={() => {
@@ -53,6 +122,30 @@ class App extends Component {
             </li>
           )}
         </ul>
+        <p>
+          Show:
+          {' '}
+          <FilterLink
+            filter="SHOW_ALL"
+            currentFilter={visibilityFilter}
+          >
+            All
+          </FilterLink>
+          {' '}
+          <FilterLink
+            filter="SHOW_ACTIVE"
+            currentFilter={visibilityFilter}
+          >
+            Active
+          </FilterLink>
+          {' '}
+          <FilterLink
+            filter="SHOW_COMPLETED"
+            currentFilter={visibilityFilter}
+          >
+            Completed
+          </FilterLink>
+        </p>
       </div>
     );
   }
@@ -60,7 +153,7 @@ class App extends Component {
 
 const appRender = () => {
   render(<App
-    todos={store.getState().todos}
+    {...store.getState()}
   />, document.getElementById('app'));
 };
 
